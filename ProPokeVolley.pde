@@ -5,12 +5,14 @@ PImage player_left_stand;
 PImage player_left_jump;
 PImage player_right_stand;
 PImage player_right_jump;
-double player_maxy = maxy - 149;
-double player_maxx = maxx - 160;
-double player_left_x = 0;
-double player_left_y = player_maxy;
-double player_right_x = player_maxx;
-double player_right_y = player_maxy;
+int player_w = 149;
+int player_h = 160;
+float player_maxy = maxy - player_w;
+float player_maxx = maxx - player_h;
+float player_left_x = 0;
+float player_left_y = player_maxy;
+float player_right_x = player_maxx;
+float player_right_y = player_maxy;
 
 PImage basket_left_1;
 PImage basket_left_2;
@@ -22,18 +24,22 @@ int basket_left_x = 0;
 int basket_left_y = 100;
 int basket_left_w = 161;
 int basket_left_h = 150;
+int basket_left_midx = basket_left_x + (basket_left_w / 2);
+int basket_left_midy = basket_left_y + (basket_left_h / 2);
 int basket_right_x = maxx - 150;
 int basket_right_y = 100;
 int basket_right_w = 161;
 int basket_right_h = 150;
+float basket_right_midx = basket_right_x + (basket_right_w / 2);
+float basket_right_midy = basket_right_y + (basket_right_h / 2);
 PImage ball;
-double ball_x = (maxx / 2) - (61 / 2);
-double ball_y = 0.0;
+float ball_x = (maxx / 2) - (61 / 2);
+float ball_y = 0.0;
 int ball_w = 61;
 int ball_h = 61;
 //double ball_dx = (random(10) - 5) / 10.0;
-double ball_dx = 5.0;
-double ball_dy = 0.0;
+float ball_dx = 5.0;
+float ball_dy = 0.0;
 
 int score_left = 0;
 int score_right = 0;
@@ -64,7 +70,39 @@ void draw()
   if (ball_y > maxy - 61.0) { ball_dy = -abs((float)ball_dy); ball_y += ball_dy;} 
   if (ball_x < 0) { ball_dx = abs((float)ball_dx); ball_x += ball_dx;} 
   if (ball_x > maxx - 61.0) { ball_dx = -abs((float)ball_dx); ball_x += ball_dx;}
-  if (is_collision((int)ball_x,(int)ball_y,ball_w,ball_h,basket_left_x,basket_left_y,basket_left_w,basket_left_h)) { ball_y = 0; } 
+
+  float ball_midx = ball_x + (0.5 * ball_w);
+  float ball_midy = ball_y + (0.5 * ball_h);
+  float player_left_midx = player_left_x + (player_w / 2);
+  float player_left_midy = player_left_y + (player_h / 2);
+  float player_right_midx = player_right_x + (player_w / 2);
+  float player_right_midy = player_right_y + (player_h / 2);
+  //Score in left basket?
+  if (dist(ball_midx,ball_midy,basket_left_midx,basket_left_midy) < (ball_w + basket_left_w) / 2) 
+  { 
+    ball_y = 0; 
+    ball_x = (maxx / 2) - (61 / 2);
+    ball_dy = 0.0;
+    ++score_right;
+  } 
+  //Score in right basket?
+  else if (dist(ball_midx,ball_midy,basket_right_midx,basket_right_midy) < (ball_w + basket_left_w) / 2) 
+  { 
+    ball_y = 0; 
+    ball_x = (maxx / 2) - (61 / 2);
+    ball_dy = 0.0;
+    ++score_left;
+  } 
+  //Left player?
+  else if (dist(ball_midx,ball_midy,player_left_midx,player_left_midy) < (ball_w + basket_left_w) / 2) 
+  { 
+    ball_dy = -ball_dy;
+  } 
+  //Right player?
+  else if (dist(ball_midx,ball_midy,player_right_midx,player_right_midy) < (ball_w + basket_left_w) / 2) 
+  { 
+    ball_dy = -ball_dy;
+  } 
   
   //Draw stuff
   image(background,0,0);
@@ -84,14 +122,4 @@ void draw()
   image(player_right_stand,(int)player_right_x,(int)player_right_y);
   image(player_left_stand,(int)player_left_x,(int)player_left_y);
   image(ball,(int)ball_x,(int)ball_y);
-}
-
-boolean is_collision(
-  int x1, int y1, int w1, int h1,
-  int x2, int y2, int w2, int h2
-)
-{
-  if (abs((x1 + (w1 / 2)) - (x2 + (w2 / 2))) < abs((w1 + w2) / 2)) return false;
-  if (abs((y1 + (h1 / 2)) - (y2 + (h2 / 2))) < abs((h1 + h2) / 2)) return false;
-  return true; 
 }
