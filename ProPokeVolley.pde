@@ -1,6 +1,6 @@
 int maxx = 908;
 int maxy = 605;
-float gravity = 0.2;
+float gravity = 0.5;
 PImage background;
 PImage player_left_stand;
 PImage player_left_jump;
@@ -51,6 +51,15 @@ float ball_dy = 0.0;
 int score_left = 0;
 int score_right = 0;
 
+// Key inputs
+boolean player_left_pressed_left = false;
+boolean player_left_pressed_right = false;
+boolean player_left_pressed_jump = false;
+
+boolean player_right_pressed_left = false;
+boolean player_right_pressed_right = false;
+boolean player_right_pressed_jump = false;
+
 void setup()
 {
   size(908,605); //maxx, maxy  
@@ -72,15 +81,14 @@ void setup()
 
 void draw()
 {
+  process_keys();
   move_ball();
   move_player();
   draw_all();
 }
 
-void draw_all() 
+void animate_baskets()
 {
-  image(background,0,0);
-
   switch (int(random(3))) {
     case 0: image(basket_left_1,basket_left_x,basket_left_y); break;
     case 1: image(basket_left_2,basket_left_x,basket_left_y); break;
@@ -91,6 +99,13 @@ void draw_all()
     case 1: image(basket_right_2,basket_right_x,basket_right_y); break;
     case 2: image(basket_right_3,basket_right_x,basket_right_y); break;
   }
+}
+
+void draw_all() 
+{
+  image(background,0,0);
+  
+  animate_baskets();
 
   if (!is_player_left_jumping)
   {
@@ -113,37 +128,26 @@ void draw_all()
 }
 
 void keyPressed() {
-  float accelation_horizontal = 2.0;
-  float initial_jump_speed = -12.0;
-  if (key == 'a' || key == 'A') { 
-    player_left_dx -= accelation_horizontal; 
-  }
-  if (key == 'd' || key == 'D') { 
-    player_left_dx += accelation_horizontal; 
-  }
-
-  if (key == 'w' || key == 'W') { 
-    if (!is_player_left_jumping)
-    {
-      is_player_left_jumping = true;
-      player_left_dy = initial_jump_speed;
-    }
-  }
+  if (key == 'a' || key == 'A') { player_left_pressed_left = true; } 
+  if (key == 'd' || key == 'D') { player_left_pressed_right = true; }
+  if (key == 'w' || key == 'W') { player_left_pressed_jump = true; }
   
   if (key == CODED) {
-    if (keyCode == LEFT ) { 
-    player_right_dx -= accelation_horizontal; 
-    }
-    if (keyCode == RIGHT) { 
-      player_right_dx += accelation_horizontal; 
-    }
-    if (keyCode == UP) { 
-      if (!is_player_right_jumping)
-      {
-        is_player_right_jumping = true;
-        player_right_dy = initial_jump_speed;
-      }
-    }
+    if (keyCode == LEFT ) { player_right_pressed_left = true; }
+    if (keyCode == RIGHT) { player_right_pressed_right = true; }
+    if (keyCode == UP) { player_right_pressed_jump = true; }
+  }
+}
+
+void keyReleased() {
+  if (key == 'a' || key == 'A') { player_left_pressed_left = false; } 
+  if (key == 'd' || key == 'D') { player_left_pressed_right = false; }
+  if (key == 'w' || key == 'W') { player_left_pressed_jump = false; }
+  
+  if (key == CODED) {
+    if (keyCode == LEFT ) { player_right_pressed_left = false; }
+    if (keyCode == RIGHT) { player_right_pressed_right = false; }
+    if (keyCode == UP) { player_right_pressed_jump = false; }
   }
 }
 
@@ -257,4 +261,38 @@ void move_player()
 
   if (player_left_y + player_h > maxy) { player_left_y = maxy - player_h; player_left_dy = 0.0; is_player_left_jumping = false; }
   if (player_right_y + player_h > maxy) { player_right_y = maxy - player_h; player_right_dy = 0.0; is_player_right_jumping = false; }
+}
+
+void process_keys()
+{
+  float accelation_horizontal = 1.0;
+  float friction_horizontal = 0.9; 
+  float initial_jump_speed = -20.0;
+  
+  if (player_left_pressed_left) { 
+    player_left_dx -= accelation_horizontal; 
+  }
+  if (player_left_pressed_right) { 
+    player_left_dx += accelation_horizontal; 
+  }
+  player_left_dx *= friction_horizontal;
+  player_right_dx *= friction_horizontal;
+
+  if (player_left_pressed_jump && !is_player_left_jumping)
+  {
+    is_player_left_jumping = true;
+    player_left_dy = initial_jump_speed;
+  }
+  
+  if (player_right_pressed_left) { 
+    player_right_dx -= accelation_horizontal; 
+  }
+  if (player_right_pressed_right) { 
+      player_right_dx += accelation_horizontal; 
+  }
+  if (player_right_pressed_jump && !is_player_right_jumping)
+  {
+    is_player_right_jumping = true;
+    player_right_dy = initial_jump_speed;
+  }
 }
