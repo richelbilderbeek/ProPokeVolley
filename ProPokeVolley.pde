@@ -75,8 +75,8 @@ void setup()
   basket_right_2 = loadImage("GhastlyRight2.png");
   basket_right_3 = loadImage("GhastlyRight3.png");
   ball = loadImage("PokeBallRed.png");
-    String title = "ProPokeVolley " + score_left + " - " + score_right;  
-    frame.setTitle(title);
+  //String title = "ProPokeVolley " + score_left + " - " + score_right;  
+  //frame.setTitle(title);
 }
 
 void draw()
@@ -173,8 +173,8 @@ void move_ball()
     ball_x = (maxx / 2) - (61 / 2);
     ball_dy = 0.0;
     ++score_right;
-    String title = "ProPokeVolley " + score_left + " - " + score_right;  
-    frame.setTitle(title);
+    //String title = "ProPokeVolley " + score_left + " - " + score_right;  
+    //frame.setTitle(title);
   } 
   //Score in right basket?
   else if (dist(ball_midx,ball_midy,basket_right_midx,basket_right_midy) < (ball_w + basket_left_w) / 2) 
@@ -183,8 +183,8 @@ void move_ball()
     ball_x = (maxx / 2) - (61 / 2);
     ball_dy = 0.0;
     ++score_left;
-    String title = "ProPokeVolley " + score_left + " - " + score_right;  
-    frame.setTitle(title);
+    //String title = "ProPokeVolley " + score_left + " - " + score_right;  
+    //frame.setTitle(title);
   } 
   //Left player?
   else if (dist(ball_midx,ball_midy,player_left_midx,player_left_midy) < (ball_w + basket_left_w) / 2) 
