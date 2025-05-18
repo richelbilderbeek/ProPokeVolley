@@ -1,15 +1,15 @@
-int maxx = 908;
-int maxy = 605;
-float gravity = 0.5;
+final int maxx = 908;
+final int maxy = 605;
+final float gravity = 0.5;
 PImage background;
 PImage player_left_stand;
 PImage player_left_jump;
 PImage player_right_stand;
 PImage player_right_jump;
-int player_w = 149;
-int player_h = 160;
-float player_maxy = maxy - player_w;
-float player_maxx = maxx - player_h;
+final int player_w = 149;
+final int player_h = 160;
+final float player_maxy = maxy - player_w;
+final float player_maxx = maxx - player_h;
 float player_left_x = 0;
 float player_left_y = player_maxy;
 float player_left_dx = 0.0;
@@ -27,24 +27,23 @@ PImage basket_left_3;
 PImage basket_right_1;
 PImage basket_right_2;
 PImage basket_right_3;
-int basket_left_x = 0;
-int basket_left_y = 100;
-int basket_left_w = 161;
-int basket_left_h = 150;
-int basket_left_midx = basket_left_x + (basket_left_w / 2);
-int basket_left_midy = basket_left_y + (basket_left_h / 2);
-int basket_right_x = maxx - 150;
-int basket_right_y = 100;
-int basket_right_w = 161;
-int basket_right_h = 150;
-float basket_right_midx = basket_right_x + (basket_right_w / 2);
-float basket_right_midy = basket_right_y + (basket_right_h / 2);
+final int basket_left_x = 0;
+final int basket_left_y = 100;
+final int basket_left_w = 161;
+final int basket_left_h = 150;
+final int basket_left_midx = basket_left_x + (basket_left_w / 2);
+final int basket_left_midy = basket_left_y + (basket_left_h / 2);
+final int basket_right_x = maxx - 150;
+final int basket_right_y = 100;
+final int basket_right_w = 161;
+final int basket_right_h = 150;
+final float basket_right_midx = basket_right_x + (basket_right_w / 2);
+final float basket_right_midy = basket_right_y + (basket_right_h / 2);
 PImage ball;
 float ball_x = (maxx / 2) - (61 / 2);
 float ball_y = 0.0;
-int ball_w = 61;
-int ball_h = 61;
-//double ball_dx = (random(10) - 5) / 10.0;
+final int ball_w = 61;
+final int ball_h = 61;
 float ball_dx = 5.0;
 float ball_dy = 0.0;
 
@@ -75,8 +74,8 @@ void setup()
   basket_right_2 = loadImage("GhastlyRight2.png");
   basket_right_3 = loadImage("GhastlyRight3.png");
   ball = loadImage("PokeBallRed.png");
-  //String title = "ProPokeVolley " + score_left + " - " + score_right;  
-  //frame.setTitle(title);
+  String title = "ProPokeVolley " + score_left + " - " + score_right;
+  surface.setTitle(title);
 }
 
 void draw()
@@ -173,8 +172,8 @@ void move_ball()
     ball_x = (maxx / 2) - (61 / 2);
     ball_dy = 0.0;
     ++score_right;
-    //String title = "ProPokeVolley " + score_left + " - " + score_right;  
-    //frame.setTitle(title);
+    String title = "ProPokeVolley " + score_left + " - " + score_right;  
+    surface.setTitle(title);
   } 
   //Score in right basket?
   else if (dist(ball_midx,ball_midy,basket_right_midx,basket_right_midy) < (ball_w + basket_left_w) / 2) 
